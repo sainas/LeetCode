@@ -31,58 +31,83 @@
 #         self.val = x
 #         self.next = None
 
+## Recursion 
+
 # class Solution:
 #     def swapPairs(self, head: ListNode) -> ListNode:
 #         if not head or not head.next:
-#                 return head 
-#         dummy = ListNode(None)
-        
-#         first, second, rest = head, head.next, head.next.next
-        
-#         dummy.next, second.next, first.next = second, first, self.swapPairs(rest)
-        
-#         return dummy.next
+#             return head
+#         p1 = head
+#         p2 = head.next
+#         p3 = head.next.next
+#         head = p2
+#         head.next = p1
+#         head.next.next = self.swapPairs(p3)
+#         return head
 
+# class Solution:
+#     def swapPairs(self, head):
+#         if not head or not head.next:
+#             return head
+#         cur = head
+#         head = cur.next
+#         cur.next = self.swapPairs(head.next)
+#         head.next = cur
+#         return head
+    
+## Loop
 class Solution:
     def swapPairs(self, head):
         if not head or not head.next:
             return head
-        temp = head.next
-        temp.next = head
-        temp.next.next = self.swapPairs(head.next.next)
-        return temp
+        newhead = head.next
+        cur = head
+        while (not cur or not cur.next):
+            p1 = cur
+            p2 = cur.next.next
+            cur = cur.next
+            cur.next = p1
+            cur.next.next = p2
+            cur = cur.next.next
+        return newhead
 
-def stringToListNode(input):
-    # Generate list from the input
-    numbers = stringToIntegerList(input)
+## Test
+# def stringToIntegerList(input):
+#     return input
 
-    # Now convert that list into linked list
-    dummyRoot = ListNode(0)
-    ptr = dummyRoot
-    for number in numbers:
-        ptr.next = ListNode(number)
-        ptr = ptr.next
+# def stringToListNode(input):
+#     # Generate list from the input
+#     numbers = stringToIntegerList(input)
 
-    ptr = dummyRoot.next
-    return ptr
+#     # Now convert that list into linked list
+#     dummyRoot = ListNode(0)
+#     ptr = dummyRoot
+#     for number in numbers:
+#         ptr.next = ListNode(number)
+#         ptr = ptr.next
 
-def listNodeToString(node):
-    if not node:
-        return "[]"
-    result = ""
-    while node:
-        result += str(node.val) + ", "
-        node = node.next
-    return "[" + result[:-2] + "]"
+#     ptr = dummyRoot.next
+#     return ptr
 
-class ListNode:
-    def __init__(self, x):
-        self.val = x
-        self.next = None
+# def listNodeToString(node):
+#     if not node:
+#         return "[]"
+#     result = ""
+#     while node:
+#         result += str(node.val) + ", "
+#         node = node.next
+#     return "[" + result[:-2] + "]"
 
-def stringToIntegerList(input):
-    return input
+# class ListNode:
+#     def __init__(self, x):
+#         self.val = x
+#         self.next = None
 
-stringToIntegerList = [1,2,3,4]
+
+
+# input =stringToIntegerList([1,2,3,4])
+# head = stringToListNode(input)
+# output = swapPairs(head)
+# print(listNodeToString(output))
 
 
