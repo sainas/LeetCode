@@ -24,6 +24,6 @@ Counter(nums).most_common(k)
 def f(x): return x != 'a' 
 filter(f, "abcdef") 
 
-resul'bcdef'
+'bcdef'
 ```
 
