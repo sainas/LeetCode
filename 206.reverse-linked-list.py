@@ -43,7 +43,7 @@ class ListNode:
 #         return rev
 
 
-## iteration     
+## iteration: three pointers     
 class Solution:
     def reverseList(self, head: ListNode) -> ListNode:
         if not head or not head.next:
@@ -59,9 +59,20 @@ class Solution:
         cur2.next=cur1
         return cur2
 
+## Iteration with only two pointers
+class Solution:
+    def reverseList(self, head: ListNode) -> ListNode:
+        if not head or not head.next:
+            return head
+        pre = None
+        nxt = head
+        while nxt.next:
+            pre, pre.next, nxt = nxt, pre, nxt.next
+        nxt.next=pre
+        return nxt
+
+
 ## Test
-
-
 def stringToIntegerList(input):
     return input
 
