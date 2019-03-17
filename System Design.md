@@ -1,6 +1,20 @@
 ## System Design
+
 ## 看这个！！！一个突击的！！
 https://www.jyt0532.com/2017/03/27/system-design/
+
+## RAFT
+非常好的动图解释
+http://thesecretlivesofdata.com/raft/
+## CAP
+### Consistency
+http://thesecretlivesofdata.com/raft/
+http://www.importnew.com/20633.html
+https://blog.csdn.net/tyrroo/article/details/81514700
+
+## LRU/LFU 的原理好处缺点
+https://blog.csdn.net/jake_li/article/details/50659868
+
 ## General Web Application
 https://msdn.microsoft.com/en-us/library/ee658099.aspx
 ### Application Request Processing

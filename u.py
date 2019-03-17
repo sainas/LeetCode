@@ -1,1 +1,4 @@
-print(int(bin(4)[2]))
+a = set('1234')
+print(a)
+print(a)
+print(a)

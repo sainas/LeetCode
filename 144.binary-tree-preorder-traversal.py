@@ -87,3 +87,20 @@ def preorderTraversal(self, root: TreeNode) -> List[int]:
                 cur = cur.right
         return lst
                 
+##Iteration
+##Much more clean
+class Solution:
+    def preorderTraversal(self, root: TreeNode) -> List[int]:
+        if not root:
+            return []
+        stack = [root]
+        lst=[]
+        while stack:
+            cur = stack.pop()
+            lst.append(cur.val)
+            if cur.right:
+                stack.append(cur.right)
+            if cur.left:
+                stack.append(cur.left)
+        return lst
+        
