@@ -1,11 +1,4 @@
-## 1012. Complement of Base 10 Integer
-class Solution:
-    def bitwiseComplement(self, N: int) -> int:
-        start = 2
-        while start<(N+1):
-            start *=2
-        return start-N-1
-        
+
 ##1013. Pairs of Songs With Total Durations Divisible by 60
 
 class Solution:
