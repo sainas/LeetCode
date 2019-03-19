@@ -49,5 +49,19 @@ class Solution:
         
 ## Iteration
 
+class Solution:
+    def inorderTraversal(self, root: TreeNode) -> List[int]:
+        stack = []
+        cur = root
+        lst=[]
+        while stack or cur:
+            if cur:
+                stack.append(cur)
+                cur = cur.left
+            else:
+                cur = stack.pop()
+                lst.append(cur.val)
+                cur = cur.right
+        return lst
         
 

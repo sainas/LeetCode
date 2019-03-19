@@ -8,12 +8,7 @@ ASCII is a subset of Unicode
 ord('a')
 ```
 Output:97
-#### Counter()
-是Dict的一个子类
-```
-from collections import Counter
-Counter(nums).most_common(k)
-```
+
 #### reduce()
 
 #### filter(function, sequence)
@@ -26,4 +21,18 @@ filter(f, "abcdef")
 
 'bcdef'
 ```
-
+### collections
+#### Counter()
+是Dict的一个子类
+```
+from collections import Counter
+Counter(nums).most_common(k)
+```
+#### deque()
+有popleft() 和 pop()
+还可以直接外加list()转换成list
+deque(['f', 'g', 'h', 'i', 'j'])
+初始化如果要加pair一定要`queue = collections.deque([(1,2)])`
+result: `deque([(1, 2)])`
+不能`queue = collections.deque((1,2))`否则不管加多少层括号都不对
+wrong result: `deque([1, 2])`

@@ -61,12 +61,14 @@ wKiom1cMppLwMd0QAAB3LagChFk387.png
 
 
 
-wKioL1cMp8HR1m6aAABLlSxXUHE848.png
-
-
 
 相比于方法2，入队直接压入即可~
-###
+### Dijkstar's Algorithm
+类似于带weight的bfs
+但weight不能是复数
+“无负权环的单源最短路径算法”
+可以证明只要保存上一步的最短距离，就可以得到这一步的最短距离
+
 ### 学习map reduce filter lambda
 下面是两个综合利用以上四个函数的例子：
 * 例子1：计算5!+4!+3!+2!+1!
@@ -109,8 +111,228 @@ print(list(filter(isPrime,range(1,100))))
 
 ### Tree
 
-#### Traversal
-##### DFS
+![postorder](LeetCodeNote.assets/145_transverse.png)
+
+#### DFS
+##### A summary of four traversal ways for each included recursive, iterative and morris traversal.
+https://leetcode.com/problems/binary-tree-postorder-traversal/discuss/45740/Summary-of-preorder-inorder-postorder-four-traversal-ways-for-each
+
+###### Recursive Way
+
+**preorder**
+```python
+class Solution(object):
+    def preorderTraversal(self, root):
+        return ([root.val] + sum(map(self.preorderTraversal, (root.left, root.right)), [])) if root else []
+```
+
+**inorder**
+```python
+class Solution(object):
+    def inorderTraversal(self, root):
+        if not root:
+            return []
+        
+        left, right = map(self.inorderTraversal, (root.left, root.right))
+        return left + [root.val] + right
+```
+**postorder**
+```python
+class Solution(object):
+    def postorderTraversal(self, root):
+        return (sum(map(self.postorderTraversal, (root.left, root.right)), []) + [root.val]) if root else []
+```
+###### Iterative Way With Stack + Visited State
+
+**preorder**
+```python
+class Solution(object):
+    def preorderTraversal(self, root):
+        if not root:
+            return []
+
+        stack, r = [[root, 0]], []
+        while stack:
+            top = stack[-1]
+
+            if top[1]:
+                stack.pop()
+                if top[0].right:
+                    stack.append([top[0].right, 0])
+            else:
+                r.append(top[0].val)
+                top[1] = 1
+
+                if top[0].left:
+                    stack.append([top[0].left, 0])
+        return r
+```
+**inorder**
+```python
+class Solution(object):
+    def inorderTraversal(self, root):
+        if not root:
+            return []
+
+        stack, r, poped = [[root, 0]], [], False
+        while stack:
+            top = stack[-1]
+
+            if top[1]:
+                stack.pop()
+                poped = True
+
+                if top[0].right:
+                    stack.append([top[0].right, 0])
+                    poped = False
+
+            elif top[0].left and not poped:
+                stack.append([top[0].left, 0])
+            else:
+                r.append(top[0].val)
+                top[1] = 1
+        return r
+```
+**postorder**
+```python
+class Solution(object):
+    def postorderTraversal(self, root):
+        if not root:
+            return []
+
+        stack, r = [[root, 0]], []
+        while stack:
+            top = stack[-1]
+
+            if top[1]:
+                stack.pop()
+                if top[0].left:
+                    stack.append([top[0].left, 0])
+            else:
+                r.append(top[0].val)
+                top[1] = 1
+
+                if top[0].right:
+                    stack.append([top[0].right, 0])
+
+        return r[::-1]
+```
+###### Iterative Way With Stack
+
+This way was inspired by [Preorder, Inorder, and Postorder Iteratively Summarization](https://leetcode.com/discuss/71943/preorder-inorder-and-postorder-iteratively-summarization)
+
+**preorder**
+```python
+class Solution(object):
+    def preorderTraversal(self, root):
+        stack, r = [], []
+        while stack or root:
+            if root:
+                stack.append(root)
+                r.append(root.val)
+                root = root.left
+            else:
+                root = stack.pop().right
+        return r
+```
+**inorder**
+```python
+class Solution(object):
+    def inorderTraversal(self, root):
+        stack, r = [], []
+        while stack or root:
+            if root:
+                stack.append(root)
+                root = root.left
+            else:
+                root = stack.pop()
+                r.append(root.val)
+                root = root.right
+        return r
+```
+**postorder**
+```python
+class Solution(object):
+    def postorderTraversal(self, root):
+        stack, r = [], []
+        while stack or root:
+            if root:
+                r.append(root.val)
+                stack.append(root)
+                root = root.right
+            else:
+                root = stack.pop().left
+
+        return r[::-1]
+```
+###### Morris Traversal Way
+
+**preorder**
+```python
+class Solution(object):
+    def preorderTraversal(self, root):
+        r = []
+        while root:
+            if not root.left:
+                r.append(root.val)
+                root = root.right
+            else:
+                pre = root.left
+                while pre.right and pre.right != root:
+                    pre = pre.right
+
+                if not pre.right:
+                    r.append(root.val)
+                    pre.right = root
+                    root = root.left
+                else:
+                    root = root.right
+        return r
+```
+**inorder**
+```python
+class Solution(object):
+    def inorderTraversal(self, root):
+        r = []
+        while root:
+            if not root.left:
+                r.append(root.val)
+                root = root.right
+            else:
+                pre = root.left
+                while pre.right and pre.right != root:
+                    pre = pre.right
+
+                if not pre.right:
+                    pre.right = root
+                    root = root.left
+                else:
+                    r.append(root.val)
+                    root = root.right
+        return r
+```
+**postorder**
+```python
+class Solution(object):
+    def postorderTraversal(self, root):
+        r = []
+        while root:
+            if not root.right:
+                r.append(root.val)
+                root = root.left
+            else:
+                next = root.right
+                while next.left and next.left != root:
+                    next = next.left
+
+                if not next.left:
+                    r.append(root.val)
+                    next.left = root
+                    root = root.right
+                else:
+                    root = root.left
+        return r[::-1]
+```
 ###### Recursion
 Tree Traversals (Inorder, Preorder and Postorder)
 Unlike linear data structures (Array, Linked List, Queues, Stacks, etc) which have only one logical way to traverse them, trees can be traversed in different ways. Following are the generally used ways for traversing trees.
@@ -272,3 +494,17 @@ MorrisTraversal(root)
   
 # This code is contributed by Naveen Aili 
 ```
+### Dynamic Programming
+#### Tabulation vs Memoizatation
+Tabulation: Bottom Up
+Memoization: Top Down
+|**Tabulation**|**Memoization**
+state||easy to think
+code ||easy (recursive)
+speed|fast|slow(lot of recursive calls)
+subproblem|if all subproblems must be solved more than onece, bottom-up is better|if not all subproblems need to be solved, top-down may be better
+table entries|every entries is filled|not every
+
+#### Two main type of a problem can use Dynamic programming:
+1) Overlapping Subproblems
+2) Optimal Substructure
