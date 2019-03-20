@@ -53,5 +53,21 @@
 class Solution:
     def maxDepth(self, root: TreeNode) -> int:
         return 1+max(self.maxDepth(root.left) , self.maxDepth(root.right)) if root else 0
-
+ 
+## Iteration
+class Solution:
+    def maxDepth(self, root: TreeNode) -> int:
+        import collections
+        if not root:
+            return 0
+        queue = collections.deque([(root,1)])
+        while queue:
+            cur, depth = queue.popleft()
+            if cur.left:
+                queue.append((cur.left,depth+1))
+            if cur.right:
+                queue.append((cur.right,depth+1))
+            
+        return depth
+        
 
