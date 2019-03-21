@@ -7,6 +7,7 @@ QuickSelect
 
 ## How would you compute the running median of a stream of integers? 
 一个小顶堆一个大顶堆
+
 ## Algorithm
 ### 如何用stack实现queue
 三种方法
@@ -508,3 +509,6 @@ table entries|every entries is filled|not every
 #### Two main type of a problem can use Dynamic programming:
 1) Overlapping Subproblems
 2) Optimal Substructure
+
+## 背包问题，优先队列
+[用优先队列式分支限界法解决0-1背包问题](https://blog.csdn.net/qq_24059821/article/details/51253704)
