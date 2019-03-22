@@ -85,6 +85,40 @@ class Solution:
         from itertools import compress
         return list(map(lambda x: list(compress(nums,[int(i) for i in (bin(x)[2:].zfill(len(nums)))])),range(pow(2,len(nums)))))
 
+## DFS
+class Solution:
+    def subsets(self, nums: List[int]) -> List[List[int]]:
+        ans = []
+        def dfs(index,path):
+            ans.append(path)
+            for i in range(index, len(nums)):
+                dfs(i+1, path+[nums[i]])
+        dfs(0,[])
+        return ans
+
+## Using combinations from the library:
+class Solution:
+    def subsets(self, nums: List[int]) -> List[List[int]]:
+        return [s for n in range(len(nums)+1)
+                for s in itertools.combinations(nums, n)]
+
 ## havn't go through
+# Bit Manipulation    
+def subsets2(self, nums):
+    res = []
+    nums.sort()
+    for i in xrange(1<<len(nums)):
+        tmp = []
+        for j in xrange(len(nums)):
+            if i & 1 << j:  # if i >> j & 1:
+                tmp.append(nums[j])
+        res.append(tmp)
+    return res
+
+
+def subsets(self, nums):
+    return [[nums[i] for i in range(len(nums)) if mask >> i & 1]
+            for mask in range(2 ** len(nums))]
+
 def subsets(self, nums):
     return [filter(None, l) for l in itertools.product(*zip(nums, [None] * len(nums)))]
