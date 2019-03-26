@@ -79,6 +79,27 @@ class Solution:
         for x in range(pow(2,len(nums))):
             ans.append(list(compress(nums,[int(i) for i in (bin(x)[2:].zfill(len(nums)))])))
         return ans
+
+## Another bit manipulation without compress
+class Solution:
+    def subsets(self, nums):
+        res = []
+        nums.sort()
+        for i in range(1<<len(nums)):
+            tmp = []
+            for j in range(len(nums)):
+                if i & 1 << j:  # if i >> j & 1: (both works)
+                    tmp.append(nums[j])
+            res.append(tmp)
+        return res
+
+
+## Another bit manipulation
+class Solution:
+    def subsets(self, nums):
+        return [[nums[i] for i in range(len(nums)) if mask >> i & 1]
+            for mask in range(1<<len(nums))]
+
 ## One-line bit manipulation using map
 class Solution:
     def subsets(self, nums: List[int]) -> List[List[int]]:
@@ -102,23 +123,23 @@ class Solution:
         return [s for n in range(len(nums)+1)
                 for s in itertools.combinations(nums, n)]
 
-## havn't go through
-# Bit Manipulation    
-def subsets2(self, nums):
-    res = []
-    nums.sort()
-    for i in xrange(1<<len(nums)):
-        tmp = []
-        for j in xrange(len(nums)):
-            if i & 1 << j:  # if i >> j & 1:
-                tmp.append(nums[j])
-        res.append(tmp)
-    return res
+## Cartesian product: itertools.product
+class Solution:
+    def subsets(self, nums):
+        return [list(filter(lambda x: x != None, l)) for l in itertools.product(*zip(nums, [None] * len(nums)))]
 
+## Using both product and compress
+from itertools import product,compress
+class Solution(object):
+    def subsets(self, nums):
+        results = []
+        for i in product([0,1],repeat = len(nums)):
+            results.append(list(compress(nums,i)))
+        return results
 
-def subsets(self, nums):
-    return [[nums[i] for i in range(len(nums)) if mask >> i & 1]
-            for mask in range(2 ** len(nums))]
-
-def subsets(self, nums):
-    return [filter(None, l) for l in itertools.product(*zip(nums, [None] * len(nums)))]
+## Another binary mask with Cartesian product
+from itertools import product
+class Solution(object):
+    def subsets(self, nums):
+        mask = product((0, 1), repeat=len(nums))
+        return [[nums[i] for i, on in enumerate(j) if on] for j in mask]

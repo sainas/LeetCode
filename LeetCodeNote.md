@@ -1,5 +1,5 @@
 # LeetCodeNote
-## **347 ** 
+## 347
 
 用QuickSelect重新做了一遍。关键是python的浅复制修改的还是原变量，所以list如果传入某个函数，然后在函数里修改了以后并不需要return了直接就在原地改了！
 ## Given an array of integers, find the median of the array.  What is the time complexity?  Can you do this in O(N) complexity?
@@ -7,6 +7,104 @@ QuickSelect
 
 ## How would you compute the running median of a stream of integers? 
 一个小顶堆一个大顶堆
+## 980
+Python是没有办法pass by value的，所以如果在子函数中改了某个变量，再回到父函数想继续做时那个变量也已经变了，所以必须每一步都回到原值
+```python
+class Solution:
+    def uniquePathsIII(self, grid) -> int:
+        self.numpath = 0
+        numzero = 0
+        self.row=len(grid)
+        self.col=len(grid[0])
+        for i in range(self.row):
+            for j in range(self.col):
+                if grid[i][j]==1:
+                    startx=i
+                    starty=j
+                if grid[i][j]==0:
+                    numzero+=1
+                if grid[i][j]==2:
+                    self.end=(i,j)
+        self.pathnum(grid,startx,starty,numzero+1)        
+        return self.numpath
+    def pathnum(self,grid,x,y,zero):
+            if grid[x][y]<0:return
+            if grid[x][y]==2:
+                if zero == 0:
+                    self.numpath += 1
+                return
+            grid[x][y]=-1
+            for i,j in self.neighbor(x,y,self.row,self.col):
+                self.pathnum(grid,i,j,zero-1)
+            grid[x][y]=0
+            ## must change back
+            ## because Python can not pass by value, only pass by referance
+            ## if C++, can pass by value and no need to change back(but space complexity 
+            ## would be high)
+
+    def neighbor(self,x,y,row,col):
+        lst=[]
+        for i,j in [[0,1],[0,-1],[1,0],[-1,0]]:
+            a,b = x+i,y+j
+            if a>=0 and a<row and b>=0 and b<col:
+                lst.append([a,b])
+        return lst
+      
+```
+用C++可以有两种写法，我不会C++但是拿别人的试了一下也可以通过
+g: passing by value
+&g: passing by reference
+*g: passing by pointer
+```C++
+// C++ passing by reference
+// https://leetcode.com/problems/unique-paths-iii/discuss/221941/C%2B%2B-brute-force-DFS
+class Solution {
+public:
+    int dfs(vector<vector<int>>& g, int i, int j, int s, int t_s) {
+  if (i < 0 || j < 0 || i >= g.size() || j >= g[0].size() || g[i][j] == -1) return 0;
+  if (g[i][j] == 2) return s == t_s ? 1 : 0;
+  g[i][j] = -1;
+  int paths = dfs(g, i + 1, j, s + 1, t_s) + dfs(g, i - 1, j, s + 1, t_s) +
+    dfs(g, i, j + 1, s + 1, t_s) + dfs(g, i, j - 1, s + 1, t_s);
+  g[i][j] = 0;
+  return paths;
+}
+int uniquePathsIII(vector<vector<int>>& g) {
+  auto i1 = 0, j1 = 0, t_steps = 0;
+  for (auto i = 0; i < g.size(); ++i)
+    for (auto j = 0; j < g[0].size(); ++j) {
+      if (g[i][j] == 1) i1 = i, j1 = j;
+      if (g[i][j] != -1) ++t_steps;
+    }
+  return dfs(g, i1, j1, 1, t_steps);
+}
+};
+```
+```c++
+// C++ passing by value
+// https://leetcode.com/problems/unique-paths-iii/discuss/221941/C%2B%2B-brute-force-DFS
+class Solution {
+public:
+    int dfs(vector<vector<int>> g, int i, int j, int s, int t_s) {
+  if (i < 0 || j < 0 || i >= g.size() || j >= g[0].size() || g[i][j] == -1) return 0;
+  if (g[i][j] == 2) return s == t_s ? 1 : 0;
+  g[i][j] = -1;
+  int paths = dfs(g, i + 1, j, s + 1, t_s) + dfs(g, i - 1, j, s + 1, t_s) +
+    dfs(g, i, j + 1, s + 1, t_s) + dfs(g, i, j - 1, s + 1, t_s);
+  //g[i][j] = 0;
+  return paths;
+}
+int uniquePathsIII(vector<vector<int>> g) {
+  auto i1 = 0, j1 = 0, t_steps = 0;
+  for (auto i = 0; i < g.size(); ++i)
+    for (auto j = 0; j < g[0].size(); ++j) {
+      if (g[i][j] == 1) i1 = i, j1 = j;
+      if (g[i][j] != -1) ++t_steps;
+    }
+  return dfs(g, i1, j1, 1, t_steps);
+}
+};
+```
 
 ## Algorithm
 ### 如何用stack实现queue
@@ -103,6 +201,9 @@ print(list(filter(isPrime,range(1,100))))
 来源：CSDN 
 原文：https://blog.csdn.net/dbanote/article/details/8912250 
 版权声明：本文为博主原创文章，转载请附上博文链接！
+
+### 背包问题，优先队列
+[用优先队列式分支限界法解决0-1背包问题](https://blog.csdn.net/qq_24059821/article/details/51253704)
 ## Data Structure
 ### Complexity
 
@@ -495,6 +596,7 @@ MorrisTraversal(root)
   
 # This code is contributed by Naveen Aili 
 ```
+
 ### Dynamic Programming
 #### Tabulation vs Memoizatation
 Tabulation: Bottom Up
@@ -510,5 +612,8 @@ table entries|every entries is filled|not every
 1) Overlapping Subproblems
 2) Optimal Substructure
 
-## 背包问题，优先队列
-[用优先队列式分支限界法解决0-1背包问题](https://blog.csdn.net/qq_24059821/article/details/51253704)
+### Priorty Queue
+和heap的区别：
+优先队列可以用很多种方法实现，比如: linked list, binary heap, binomial heap, Fibonacci heap 等
+他们对于不同的操作有不同的复杂度
+比如最短路径的Dijkstra算法，该算法使用优先队列实现时，各个数据结构的时间复杂度是不同的，其中专门为该算法设计的斐波那契堆时间复杂度是最优的

@@ -21,11 +21,23 @@ Output:97
 
 
 
-```
+```python
 def f(x): return x != 'a' 
 filter(f, "abcdef") 
 
 'bcdef'
+```
+```python
+a = [None,1,3,None,2,None,4]
+filter(None,a)
+
+[1,3,2,4]
+```
+```python
+a = [None,1,0,None,2,None,4]
+filter(None,a)
+
+[1,2,4]
 ```
 ## collections
 ### Counter()
@@ -46,3 +58,20 @@ wrong result: `deque([1, 2])`
 ## itertools
 ### compress()
 compress('ABCDEF', [1,0,1,0,1,1]) --> A C E F
+
+### product()
+
+
+Cartesian product of input iterables.
+```
+product('ABCD', 'xy') --> Ax Ay Bx By Cx Cy Dx Dy
+product(range(2), repeat=3) --> 000 001 010 011 100 101 110 111
+```
+
+product('ABCD', repeat=2)	 |	AA AB AC AD BA BB BC BD CA CB CC CD DA DB DC DD
+permutations('ABCD', 2)	 	|AB AC AD BA BC BD CA CB CD DA DB DC
+combinations('ABCD', 2)	 |	AB AC AD BC BD CD
+combinations_with_replacement('ABCD', 2)	 |	AA AB AC AD BB BC BD CC CD DD
+
+### combinations()
+### permutations()
