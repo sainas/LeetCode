@@ -1,4 +1,25 @@
 # LeetCodeNote
+
+## 215
+https://leetcode.com/problems/kth-largest-element-in-an-array/discuss/167837/Python-or-tm
+
+Max Heap: Time: O(n + klog(n)) | Space: O(n)
+Min Heap: Time: O(k) + O((n-k) * logk) | Space: O(K)
+Quick select： O(n)
+
+如果考虑k无限接近n
+Max: O(n + nlog(n)) ~= O(nlogn)
+Min: O(n + logk) ~= O(n)
+
+如果考虑k = 0.5n
+Max: O(n + nlogn)
+Min: O(n + nlogn)
+
+如果考虑n 无限大
+Max: O(constant * n) 为什么是constant * n，参考
+Min: O(log(k) * n)
+
+所以几个例子比下来，还真说不清道不明哪个更好，大家千万以后不要机械化上来就写Min Heap，到时候面试官问起来Max和Min区别在哪，完全懵逼 (公瑾某家电面被问到这，然后没分析透，吃一堑长一智)
 ## 347
 
 用QuickSelect重新做了一遍。关键是python的浅复制修改的还是原变量，所以list如果传入某个函数，然后在函数里修改了以后并不需要return了直接就在原地改了！
@@ -611,7 +632,16 @@ table entries|every entries is filled|not every
 #### Two main type of a problem can use Dynamic programming:
 1) Overlapping Subproblems
 2) Optimal Substructure
+### Heap
+#### Time Complexity
+**heapify O(n) **
+假如有N个节点，那么高度为H=logN，最后一层每个父节点最多只需要下调1次，倒数第二层最多只需要下调2次，顶点最多需要下调H次，而最后一层父节点共有2^(H-1)个,倒数第二层公有2^(H-2),顶点只有1(2^0)个，所以总共的时间复杂度为s = 1 * 2^(H-1) + 2 * 2^(H-2) + ... + (H-1) * 2^1 + H * 2^0将H代入后s= 2N - 2 - log2(N)，近似的时间复杂度就是O(N)。
 
+作者：wuxinliulei
+链接：https://www.zhihu.com/question/20729324/answer/231955716
+来源：知乎
+著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。
+**binary heap insert O(logn)**
 ### Priorty Queue
 和heap的区别：
 优先队列可以用很多种方法实现，比如: linked list, binary heap, binomial heap, Fibonacci heap 等

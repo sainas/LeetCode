@@ -45,6 +45,7 @@
 
 # Using QuickSelect Average O(n)
 # QuickSort is O(nlog(n))
+# This code: every time creat a new sublist
 #Reference:https://leetcode.com/problems/top-k-frequent-elements/discuss/250326/Python-O(n)-with-quickSelect
 class Solution:
     def topKFrequent(self, nums: int, k: int):
@@ -75,4 +76,7 @@ class Solution:
         nums[idx], nums[-1] = nums[-1], nums[idx]
         return idx
 
+# Better:Using QuickSelect Average O(n), no slicing (no new list)
+# QuickSort is O(nlog(n))
+# Haven't write, just replace the slicing with two variable: "start" and "end"
 

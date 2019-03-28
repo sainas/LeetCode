@@ -102,7 +102,7 @@ class Solution:
         if not lst1 or not lst2:
             cur.next = lst1 if lst1 else lst2
         return dummyhead.next
-        
+
 ## Sort numbers            
 class Solution:
     def mergeKLists(self, lists: List[ListNode]) -> ListNode:
@@ -122,5 +122,78 @@ class Solution:
             cur = cur.next
         return dummyhead.next
             
-                            
-        
+## PriorityQueue
+# O(Nlogk) 
+# TypeError '<' not supported between instances of 'ListNode' and 'ListNode':
+# This error occurs because ListNode definition does not include __lt__ method. 
+# To avoid this error, we can use a wrapper class with __lt__ method for ListNode.
+# https://leetcode.com/problems/merge-k-sorted-lists/solution/
+class Solution:
+    def mergeKLists(self, lists: List[ListNode]) -> ListNode:
+        class Wrapper():
+            def __init__(self, node):
+                self.node = node
+            def __lt__(self,other):
+                return self.node.val < other.node.val
+        from queue import PriorityQueue
+        dummy = ListNode(0)
+        cur = dummy
+        pq = PriorityQueue()
+        for node in lists:
+            if node:
+                pq.put(Wrapper(node))
+        while not pq.empty():
+            node = pq.get().node
+            cur.next = node
+            cur = cur.next
+            node = node.next
+            if node:
+                pq.put(Wrapper(node))
+        return dummy.next
+## Divide and conquer
+#  O(Nlogk)                                         
+class Solution:
+    def mergeKLists(self, lists: List[ListNode]) -> ListNode:
+        if not lists:
+            return None
+        if len(lists)==1:
+            return lists[0]
+        for i in range(len(lists)//2):
+            lists[2*i]=self.merge2(lists[2*i],lists[2*i+1])
+        lists = lists[::2]  
+        return self.mergeKLists(lists)
+            
+    def merge2(self,lst1,lst2):
+        dummyhead = ListNode(0)
+        cur = dummyhead
+        while lst1 and lst2:
+            if lst1.val < lst2.val:
+                cur.next = lst1
+                lst1=lst1.next
+            else:
+                cur.next = lst2
+                lst2=lst2.next
+            cur=cur.next  
+        if not lst1 or not lst2:
+            cur.next = lst1 if lst1 else lst2
+        return dummyhead.next
+
+## Heap
+class Solution:
+    def mergeKLists(self, lists: List[ListNode]) -> ListNode:
+        from heapq import heappush, heappop
+        heap = []
+        for node in lists:
+            while node:
+                heappush(heap,node.val)
+                node = node.next
+        dummy = ListNode(0)
+        cur = dummy
+        while heap:
+            cur.next = ListNode(heappop(heap))
+            cur = cur.next
+        return dummy.next            
+            
+            
+            
+              
