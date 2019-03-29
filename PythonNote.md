@@ -1,4 +1,18 @@
 # Python Note
+## copy and deepcopy
+```python
+import copy
+a = [1, 2, [3, 4], 5]
+b1 = a
+b2 = copy.copy(a)
+b3 = copy.deepcopy(a)
+a[0]='test'
+a[3].append('999')
+```
+b1: ['test', 2, [3, 4, 999], 5]
+b2: [1, 2, [3, 4, 999], 5]
+b3: [1, 2, [3, 4], 5]
+
 ## decimal to binary
 
 ```
