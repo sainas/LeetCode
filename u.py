@@ -25,30 +25,34 @@
 #         return idx
 
 class Solution:
-    def findKthLargest(self, nums, k: int) -> int:
-        ## use quickSelect; can also use heap
-        return self.quickSelect(nums,0,len(nums)-1,k)
-    
-    def quickSelect(self, nums, start, end, k):
-        idx = self.partition(nums,start, end)
-        if idx+1 == k:
-            return nums[idx]
-        elif idx+1 < k:
-            return self.quickSelect(nums,idx+1,end,k)
-        else:  # idx+1 > k
-            return self.quickSelect(nums,start,idx-1,k)
-        
-    def partition(self, nums,start, end):
-        pivot = nums[end]  # counte comparison
-        idx = start  # processed index
-        for i in range(start,end):
-            if nums[i]> pivot:  # bigger left
-                nums[idx], nums[i] = nums[i], nums[idx]
-                idx += 1
-        nums[idx], nums[end] = nums[end], nums[idx]
-        return idx
-
+    def numEnclaves(self, A):
+        def sink(i, j):
+            if 0 <= i < len(A) and 0 <= j < len(A[0]) and A[i][j] == 1:
+                A[i][j] = 0
+                print(A,i,j)
+                # sink(i+1,j)
+                # sink(i-1,j)
+                # sink(i,j+1)
+                # sink(i,j-1)
+                # list(map(lambda x,y:sink(x,y), [i+1, i-1, i, i], [j, j, j+1, j-1]))
+                list(map(sink, [i+1, i-1, i, i], [j, j, j+1, j-1]))
+                return 1
+            return 0
+        # for i in range(len(A)):
+        #     sink(i,0)
+        #     sink(i,len(A[0])-1)
+        # for j in range(len(A[0])):
+        #     sink(0,j)
+        #     sink(len(A)-1,j)
+        list(map(lambda x:sink(x,0),[i for i in range(len(A))]))
+        list(map(sink,[0,len(A)-1],[j for j in range(len(A[0]))]))
+        print('qq',A)
+        return sum( sink(i,j) for i in range(len(A)) for j in range(len(A[0])))
         
 
 s=Solution()
-print(s.findKthLargest([1,4,3,2,5,6,9,8],4))        
+a=[[0,0,0,0],[1,0,1,0],[0,1,1,0],[0,0,0,0]] 
+b=[[0,1,1,0],[0,0,1,0],[0,0,1,0],[0,0,0,0]]  
+print(s.numEnclaves(a ))   
+print(s.numEnclaves(b ))   
+  
